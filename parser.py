@@ -1,7 +1,9 @@
+import os.path
 import threading
 from googletrans import Translator
 from time import sleep
 import re
+import platform
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
@@ -23,6 +25,7 @@ from VK import AddImageToDirectory, SendPostToVk, AddImageToVkAlbum
 config = configparser.ConfigParser()
 config.read('Config.ini')
 token = str(config['Telegram']['token'])
+linux_flag = False
 
 bot = telebot.TeleBot(token)
 
@@ -30,8 +33,8 @@ data_list = deque()
 data_count = -1
 data_flag = False
 massLinks = []
-getYachtSleep = 1.5
-btnSleep = 1
+getYachtSleep = int(config['Program']['getYachtSleep'])
+btnSleep = int(config['Program']['btnSleep'])
 
 
 @bot.message_handler(commands=['start'])
@@ -57,8 +60,12 @@ def move_to_element(element, driver):
 def getYachtName(driver):
     global getYachtSleep
     try:
-        yachtNameElement = driver.find_element(By.XPATH,
-                                               '//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/h1')
+        #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/h1'
+        if(linux_flag):
+            yachtNameElement = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > h1')
+        else:
+            yachtNameElement = driver.find_element(By.CSS_SELECTOR,
+                                               '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > h1')
         # смещение до элемента yachtNameElement
         move_to_element(yachtNameElement, driver)
         sleep(getYachtSleep)
@@ -72,8 +79,12 @@ def getYachtName(driver):
 def getYachtPrice(driver):
     global getYachtSleep
     try:
-        yachtPrice = driver.find_element(By.XPATH,
-                                         '//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/div[2]')
+        #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/div[2]'
+        if(linux_flag):
+            yachtPrice = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > div.Hero__PriceWrapper-sc-1mjgwl-5.hGqpgd > div')
+        else:
+            yachtPrice = driver.find_element(By.CSS_SELECTOR,
+                                         '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > div.Hero__PriceWrapper-sc-1mjgwl-5.hGqpgd > div.TextHeadline1__TextHeadline1Wrapper-sc-1bi3cli-0.bIxKdL.Price__StyledPrice-sc-crp2x0-0.kIhjJa')
         # смещение до элемента yachtPrice
         move_to_element(yachtPrice, driver)
         sleep(getYachtSleep)
@@ -87,8 +98,12 @@ def getYachtPrice(driver):
 def getYachDescription(driver):
     global getYachtSleep
     try:
-        yachtDescription = driver.find_element(By.XPATH,
-                                               '//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[2]/div[2]/div[3]/div[2]')
+        #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[2]/div[2]/div[3]/div[2]'
+        if(linux_flag):
+            yachtDescription = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.AdMotor__Details-sc-934l4e-1.fnuIsR > div:nth-child(2) > div.BodyCard__StyledCard-sc-15r463q-0.dSLbnj > div.ExpandableContent__Content-sc-11a0rym-0.eUvFOR > div')
+        else:
+            yachtDescription = driver.find_element(By.CSS_SELECTOR,
+                                               '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.AdMotor__Details-sc-934l4e-1.fnuIsR > div:nth-child(2) > div.BodyCard__StyledCard-sc-15r463q-0.dSLbnj > div.ExpandableContent__Content-sc-11a0rym-0.eUvFOR > div')
         # смещение до элемента yachtDescription
         move_to_element(yachtDescription, driver)
         sleep(getYachtSleep)
@@ -242,12 +257,28 @@ def findLinkInDict(driver):
 
 
 def Parser2():
+    global linux_flag
     global data_count
     global data_flag
     global btnSleep
-    service = Service('chromedriver.exe')
-    driver = webdriver.Chrome(
-        service=service)
+    driver = None
+    if(platform.system() == 'Windows'):
+        service = Service('chromedriver.exe')
+        options = webdriver.ChromeOptions()
+        options.headless = False
+        options.add_argument('log-level=3')
+        driver = webdriver.Chrome(
+            service=service, options=options)
+    else:
+        try:
+            linux_flag = True
+            service = Service(executable_path=os.path.abspath('chromedriver'))
+            options = webdriver.ChromeOptions()
+            options.headless = True
+            driver = webdriver.Chrome(service=service, options=options)
+        except (Exception, Error) as error:
+            print("ошибка")
+            print(error)
     driver.get('https://www.blocket.se/annonser/hela_sverige/fordon/batar/segelbat?cg=1062&page=1')
     sleep(3)
     driver.find_element(by=By.XPATH, value='//*[@id="accept-ufti"]').click()
@@ -257,12 +288,14 @@ def Parser2():
         page = CountPages(driver)
     elif config['Program']['flag']=='False':
         page = int(config['Program']['page'])
+        driver.get(f'https://www.blocket.se/annonser/hela_sverige/fordon/batar/segelbat?cg=1062&page={page}')
     pageIndex = int(config['Program']['PageIndex'])
     while True:
         sleep(2)
         driver.execute_script("window.scrollBy(0,7000)", "")
         sleep(4)
         while (True):
+            print("Страница = " + str(page))
             try:
                 if (pageIndex == -1):
                     print('Достигнут конец страницы')
@@ -272,13 +305,14 @@ def Parser2():
                                                   value=f'#__next > div > main > div.MediumLayout__BodyWrapper-sc-q6qal1-2.bCbTFf > div.MediumLayout__BodyLeft-sc-q6qal1-3.cOXCVa > div:nth-child(3) > div > div:nth-child({pageIndex}) > article > div.styled__Content-sc-1kpvi4z-2.hqmvlX > div.styled__SubjectWrapper-sc-1kpvi4z-15.bJucZO > h2 > a')
                     sleep(1)
                     move_to_element(element, driver)
-                    sleep(1.5)
+                    sleep(2)
                     element.click()
-                    print('Page = ' + str(pageIndex))
-                    sleep(1)
+                    print('Ссылка по счёту = ' + str(pageIndex))
+                    sleep(3)
                     wb = load_workbook('output.xlsx')
                     sh1 = wb['List']
                     sh = wb.active
+                    print("Помещено объектов = " + str(len(data_list)))
                     if (findLink(sh, driver)):
                         print('Эта ссылка уже записана')
                         driver.back()
@@ -331,11 +365,10 @@ def SendTelegram():
     global data_flag
     print(data_flag)
     print("SENDMESSAGE DATA LIST")
-    print("Помещено объектов = " + str(len(data_list)))
     if(len(data_list) >1):
         if data_flag:
             data = data_list.pop()
-            if(data['name']=='' and data['price']=='' and data['description']==''):
+            if(data['name']=='' and data['description']=='' and len(data['imagelinks'] or data['price']=='')==0):
                 print("Empty")
             else:
                 try:
@@ -382,7 +415,10 @@ def thr():
 
 if __name__ == "__main__":
     try:
+        print('Start a program')
         threading.Thread(target=Parser2).start()
+        if(str(config['Program']['sendMess'])=='True'):
+            schedule.every(30).seconds.do(SendTelegram)
         schedule.every().days.at((config['TimeUP']['time1'])).do(SendTelegram)
         schedule.every().days.at((config['TimeUP']['time2'])).do(SendTelegram)
         schedule.every().days.at((config['TimeUP']['time3'])).do(SendTelegram)
