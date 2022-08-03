@@ -262,10 +262,9 @@ def Parser2():
     else:
         try:
             linux_flag = True
-            service = Service(executable_path=os.path.abspath('chromedriver'))
             options = webdriver.ChromeOptions()
             options.headless = True
-            driver = webdriver.Chrome(service=service, options=options)
+            driver = webdriver.Chrome(executable_path='/home/bngtrue/Desktop/Blocket-Parser-Telegram-VK-Bot-main/chromedriver', options=options)
         except (Exception, Error) as error:
             print("ошибка")
             print(error)
