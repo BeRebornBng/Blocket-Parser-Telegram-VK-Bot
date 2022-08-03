@@ -60,12 +60,8 @@ def move_to_element(element, driver):
 def getYachtName(driver):
     global getYachtSleep
     try:
-        #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/h1'
-        if(linux_flag):
-            yachtNameElement = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > h1')
-        else:
-            yachtNameElement = driver.find_element(By.CSS_SELECTOR,
-                                               '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > h1')
+        yachtNameElement = driver.find_element(By.CSS_SELECTOR,
+                                            '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > h1')
         # смещение до элемента yachtNameElement
         move_to_element(yachtNameElement, driver)
         sleep(getYachtSleep)
@@ -80,10 +76,7 @@ def getYachtPrice(driver):
     global getYachtSleep
     try:
         #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[1]/div[2]/div[2]'
-        if(linux_flag):
-            yachtPrice = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > div.Hero__PriceWrapper-sc-1mjgwl-5.hGqpgd > div')
-        else:
-            yachtPrice = driver.find_element(By.CSS_SELECTOR,
+        yachtPrice = driver.find_element(By.CSS_SELECTOR,
                                          '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.LoadingAnimationStyles__PlaceholderWrapper-sc-c75se8-0.bXGjLh > div.Hero__ContentWrapper-sc-1mjgwl-3.hWIxa-D > div.Hero__PriceWrapper-sc-1mjgwl-5.hGqpgd > div.TextHeadline1__TextHeadline1Wrapper-sc-1bi3cli-0.bIxKdL.Price__StyledPrice-sc-crp2x0-0.kIhjJa')
         # смещение до элемента yachtPrice
         move_to_element(yachtPrice, driver)
@@ -99,10 +92,7 @@ def getYachDescription(driver):
     global getYachtSleep
     try:
         #'//*[@id="skip-tabbar"]/div[2]/div[2]/div[1]/div/article/div[2]/div[2]/div[3]/div[2]'
-        if(linux_flag):
-            yachtDescription = driver.find_element(By.CSS_SELECTOR, '#skip-tabbar > div:nth-child(2) > article > div.AdMotor__Details-sc-934l4e-1.fnuIsR > div:nth-child(2) > div.BodyCard__StyledCard-sc-15r463q-0.dSLbnj > div.ExpandableContent__Content-sc-11a0rym-0.eUvFOR > div')
-        else:
-            yachtDescription = driver.find_element(By.CSS_SELECTOR,
+        yachtDescription = driver.find_element(By.CSS_SELECTOR,
                                                '#skip-tabbar > div.MediumLayout__CenterWithPadding-sc-y8zw9h-4.MediumLayout__CenterWithPaddingAndBg-sc-y8zw9h-5.hwvqhT.cdvLMa > div.MediumLayout__BodyWrapper-sc-y8zw9h-0.knswkO > div.MediumLayout__BodyLeft-sc-y8zw9h-2.kTyLZD > div > article > div.AdMotor__Details-sc-934l4e-1.fnuIsR > div:nth-child(2) > div.BodyCard__StyledCard-sc-15r463q-0.dSLbnj > div.ExpandableContent__Content-sc-11a0rym-0.eUvFOR > div')
         # смещение до элемента yachtDescription
         move_to_element(yachtDescription, driver)
