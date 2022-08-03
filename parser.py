@@ -65,7 +65,6 @@ def getYachtName(driver):
         # смещение до элемента yachtNameElement
         move_to_element(yachtNameElement, driver)
         sleep(getYachtSleep)
-        return translate(str(yachtNameElement.text))
     except (Exception, Error) as error:
         print('Название яхты не найдено')
         # название яхты не найдено
@@ -255,7 +254,7 @@ def Parser2():
     if(platform.system() == 'Windows'):
         service = Service('chromedriver.exe')
         options = webdriver.ChromeOptions()
-        options.headless = False
+        options.headless = True
         options.add_argument('log-level=3')
         driver = webdriver.Chrome(
             service=service, options=options)
@@ -264,7 +263,7 @@ def Parser2():
             linux_flag = True
             options = webdriver.ChromeOptions()
             options.headless = True
-            driver = webdriver.Chrome(executable_path='/home/bngtrue/Desktop/Blocket-Parser-Telegram-VK-Bot-main/chromedriver', options=options)
+            driver = webdriver.Chrome(executable_path=os.path.abspath('chromedriver'), options=options)
         except (Exception, Error) as error:
             print("ошибка")
             print(error)
