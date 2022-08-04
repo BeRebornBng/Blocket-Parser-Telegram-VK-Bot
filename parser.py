@@ -23,7 +23,7 @@ from collections import deque
 from VK import AddImageToDirectory, SendPostToVk, AddImageToVkAlbum
 
 config = configparser.ConfigParser()
-config.read('Config.ini')
+config.read('Config.ini', encoding='UTF-8')
 token = str(config['Telegram']['token'])
 linux_flag = False
 
@@ -65,6 +65,7 @@ def getYachtName(driver):
         # смещение до элемента yachtNameElement
         move_to_element(yachtNameElement, driver)
         sleep(getYachtSleep)
+        return translate(yachtNameElement.text)
     except (Exception, Error) as error:
         print('Название яхты не найдено')
         # название яхты не найдено
@@ -96,7 +97,7 @@ def getYachDescription(driver):
         # смещение до элемента yachtDescription
         move_to_element(yachtDescription, driver)
         sleep(getYachtSleep)
-        return translate(yachtDescription.text)
+        return str(translate(yachtDescription.text))
     except (Exception, Error) as error:
         # описание яхты не найдено
         print("Описание яхты не найдено")
@@ -279,7 +280,7 @@ def Parser2():
         driver.get(f'https://www.blocket.se/annonser/hela_sverige/fordon/batar/segelbat?cg=1062&page={page}')
     pageIndex = int(config['Program']['PageIndex'])
     while True:
-        sleep(2)
+        sleep(6)
         driver.execute_script("window.scrollBy(0,7000)", "")
         sleep(4)
         while (True):
